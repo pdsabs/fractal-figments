@@ -1,2 +1,2 @@
-# fractalfigments
+# fractal-figments
 fractal generator 
