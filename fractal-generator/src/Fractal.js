@@ -4,60 +4,55 @@ import p5 from 'p5';
 const Fractal = () => {
   const Sketch = p5 => {
     let angle = 0;
-    const sentence = "This is an example of a sentence where each word forms part of the fractal tree.";
-    let words = sentence.split(' ');
+    let radius = 0;
 
     p5.setup = () => {
-      p5.createCanvas(800, 600);
-      p5.noLoop();
+      p5.createCanvas(p5.windowWidth, p5.windowHeight);
+      p5.background(255);  // Set background to white
     };
 
     p5.draw = () => {
-      p5.background(0);
-      p5.translate(p5.width / 2, p5.height);
-      drawBranch(p5, 100, 0);
-    };
+      // Calculate x and y coordinates
+      let x = radius * Math.cos(angle);
+      let y = radius * Math.sin(angle);
 
-    const drawBranch = (p5, len, wordIndex) => {
-      if (wordIndex < words.length) {
-        let word = words[wordIndex];
-        p5.fill(255);
-        p5.textSize(len);
-        p5.textAlign(p5.CENTER, p5.CENTER);
+      // Translate to the center of the canvas
+      p5.translate(p5.width / 2, p5.height / 2);
+      p5.stroke(0); // Set the line color to black
+      p5.strokeWeight(2); // Set the stroke weight
 
-        // Draw the text upward by rotating canvas
-        p5.rotate(-Math.PI / 2);
-        p5.text(word, 0, 0);
-        p5.rotate(Math.PI / 2);
+      // Draw a point at the (x, y) position
+      p5.point(x, y);
 
-        // Move to end of word
-        let wordWidth = p5.textWidth(word);
-        p5.translate(0, -wordWidth);
-
-        if (len > 10) { // Only continue if length is sufficient
-          p5.push();
-          p5.rotate(angle);
-          drawBranch(p5, len * 0.6, wordIndex + 1);
-          p5.pop();
-          p5.push();
-          p5.rotate(-angle);
-          drawBranch(p5, len * 0.6, wordIndex + 1);
-          p5.pop();
-        }
-      }
-    };
-
-    p5.mouseMoved = () => {
-      angle = p5.map(p5.mouseX, 0, p5.width, 0, Math.PI);
-      p5.redraw();
+      // Incrementally change the angle and radius
+      angle += 0.1;
+      radius += 0.5;
     };
   };
 
   useEffect(() => {
-    new p5(Sketch);
+    const myP5 = new p5(Sketch);
+
+    return () => {
+      myP5.remove();
+    };
   }, []);
 
-  return <div />;
+  return (
+    <div>
+      <style>
+        {`
+                    canvas {
+                        position: absolute;
+                        top: 50%;
+                        left: 50%;
+                        transform: translate(-50%, -50%);
+                    }
+                `}
+      </style>
+      <div/>
+    </div>
+  );
 };
 
 export default Fractal;
