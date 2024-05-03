@@ -9,8 +9,9 @@ const SpiralSketch = () => {
     let zoom = 1.00;
 
     p5.setup = () => {
-      p5.createCanvas(p5.windowWidth, p5.windowHeight);
-      p5.background(255);
+      p5.createCanvas(800, 600);
+      p5.background(0);
+      p5.frameRate(60);
     };
 
     p5.draw = () => {
@@ -37,7 +38,6 @@ const SpiralSketch = () => {
       angle += 0.1;
       radius += 2;
 
-      console.log(points.length);
       // Optionally limit the number of points for performance
       // if (points.length > 1000) {
       //   points.shift(); // Remove the oldest point
@@ -45,6 +45,8 @@ const SpiralSketch = () => {
     };
 
     function drawPoints(points) {
+      //let oldX = 0;
+      //let oldY = 0;
       points.forEach(point => {
         if (points.length >= 300) {
           point.angle += 0.2;
@@ -53,15 +55,15 @@ const SpiralSketch = () => {
           point.x = point.radius * Math.cos(point.angle);
           point.y = point.radius * Math.sin(point.angle);
           p5.point(point.x, point.y);
-
         } else {
+          //p5.line(oldX, oldY, point.x, point.y);
           p5.point(point.x, point.y);
+          //oldX = point.x;
+          //oldY = point.y;
         }
       });
     }
   };
-
-
 
   useEffect(() => {
     const myP5 = new p5(Sketch);
